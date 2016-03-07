@@ -21,6 +21,13 @@ namespace MVCHomeWork1.Controllers
             return View(客戶聯絡人.ToList());
         }
 
+        [HttpPost]
+        public ActionResult Index(string ContactPersonName)
+        {
+            var data = db.客戶聯絡人.Where(t => t.姓名.Contains(ContactPersonName)).ToList();
+            return View(data);
+        }
+
         // GET: ClientContactPerson/Details/5
         public ActionResult Details(int? id)
         {
@@ -50,13 +57,20 @@ namespace MVCHomeWork1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,客戶Id,職稱,姓名,Email,手機,電話")] 客戶聯絡人 客戶聯絡人)
         {
+            客戶聯絡人 EmailSerachResult = new 客戶聯絡人();
             if (ModelState.IsValid)
             {
+                EmailSerachResult = db.客戶聯絡人.Where(e =>e.客戶Id == 客戶聯絡人.客戶Id).Where(e => e.Email == 客戶聯絡人.Email).FirstOrDefault();
+                if (EmailSerachResult == null) 
+                {
                 db.客戶聯絡人.Add(客戶聯絡人);
                 db.SaveChanges();
                 return RedirectToAction("Index");
+                }
             }
 
+            if (EmailSerachResult != null) { ModelState.AddModelError(String.Empty, "Email已經存在"); }
+           
             ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }

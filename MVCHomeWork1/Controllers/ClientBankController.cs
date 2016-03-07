@@ -21,6 +21,13 @@ namespace MVCHomeWork1.Controllers
             return View(客戶銀行資訊.ToList());
         }
 
+        [HttpPost]
+        public ActionResult Index(string AccountName)
+        {
+            var data = db.客戶銀行資訊.Where(t => t.帳戶名稱.Contains(AccountName)).ToList();
+            return View(data);
+        }
+
         // GET: ClientBank/Details/5
         public ActionResult Details(int? id)
         {

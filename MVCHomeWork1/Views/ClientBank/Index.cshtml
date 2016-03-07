@@ -5,9 +5,11 @@
 }
 
 <h2>Index</h2>
-
+@using (Html.BeginForm())
+{
 <p>
     @Html.ActionLink("Create New", "Create")
+    帳戶名稱搜尋: <input type="text" name="AccountName"><input type="submit" value="搜尋">
 </p>
 <table class="table">
     <tr>
@@ -32,7 +34,8 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.銀行名稱)
@@ -53,11 +56,12 @@
             @Html.DisplayFor(modelItem => item.客戶資料.客戶名稱)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
         </td>
     </tr>
 }
 
 </table>
+}

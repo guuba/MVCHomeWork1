@@ -23,5 +23,10 @@ namespace MVCHomeWork1.Models
         public string 電話 { get; set; }
     
         public virtual 客戶資料 客戶資料 { get; set; }
+
+        internal bool Where()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

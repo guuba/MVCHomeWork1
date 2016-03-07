@@ -12,12 +12,21 @@ namespace MVCHomeWork1.Controllers
 {
     public class ClientController : Controller
     {
+        
+
         private 客戶資料Entities db = new 客戶資料Entities();
 
         // GET: Client
         public ActionResult Index()
         {
             return View(db.客戶資料.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Index(string clientName)
+        {
+            var data = db.客戶資料.Where(t => t.客戶名稱.Contains(clientName)).ToList();
+            return View(data);
         }
 
         // GET: Client/Details/5
