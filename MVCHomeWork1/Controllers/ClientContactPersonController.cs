@@ -17,14 +17,14 @@ namespace MVCHomeWork1.Controllers
         // GET: ClientContactPerson
         public ActionResult Index()
         {
-            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料);
+            var 客戶聯絡人 = db.客戶聯絡人.Where(e =>e.是否已刪除==false).Include(客 => 客.客戶資料);
             return View(客戶聯絡人.ToList());
         }
 
         [HttpPost]
         public ActionResult Index(string ContactPersonName)
         {
-            var data = db.客戶聯絡人.Where(t => t.姓名.Contains(ContactPersonName)).ToList();
+            var data = db.客戶聯絡人.Where(t => t.是否已刪除 == false).Where(t => t.姓名.Contains(ContactPersonName)).ToList();
             return View(data);
         }
 
@@ -128,8 +128,9 @@ namespace MVCHomeWork1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
-            db.客戶聯絡人.Remove(客戶聯絡人);
+            var 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            //db.客戶聯絡人.Remove(客戶聯絡人);
+            客戶聯絡人.是否已刪除 = true;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
