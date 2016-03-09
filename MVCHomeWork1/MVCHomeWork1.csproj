@@ -201,6 +201,7 @@
     <Compile Include="Controllers\ClientBankController.cs" />
     <Compile Include="Controllers\ClientContactPersonController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\ClientInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -246,6 +247,9 @@
     </Compile>
     <Compile Include="Models\客戶資料.Partial.cs">
       <DependentUpon>EFGeneratePartialClass.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\客戶資訊檢視表.cs">
+      <DependentUpon>ClientModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\客戶銀行資訊.cs">
       <DependentUpon>ClientModel.tt</DependentUpon>
@@ -352,6 +356,7 @@
     <Content Include="Views\ClientBank\Details.cshtml" />
     <Content Include="Views\ClientBank\Edit.cshtml" />
     <Content Include="Views\ClientBank\Index.cshtml" />
+    <Content Include="Views\ClientInfo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
