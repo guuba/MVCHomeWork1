@@ -28,8 +28,10 @@ namespace MVCHomeWork1.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        
+
+      
         [StringLength(50, ErrorMessage="欄位長度不得大於 50 個字元")]
+        [手機號碼格式驗證(ErrorMessage = "手機格式必需為xxxx-xxxxxx")]
         public string 手機 { get; set; }
         
         [StringLength(50, ErrorMessage="欄位長度不得大於 50 個字元")]
