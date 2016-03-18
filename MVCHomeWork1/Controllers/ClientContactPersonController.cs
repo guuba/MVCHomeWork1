@@ -20,6 +20,8 @@ namespace MVCHomeWork1.Controllers
         // GET: ClientContactPerson
         public ActionResult Index()
         {
+            List<string> SearchJobTitle = GetJobTitleItem();
+            ViewBag.JobTitleItem = SearchJobTitle;
             var data = repo.All();
             return View(data);
             //var 客戶聯絡人=repo.Find()
@@ -28,18 +30,40 @@ namespace MVCHomeWork1.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(string ContactPersonName)
+        public ActionResult Index(string JobTitleType)
         {
             //var data = repo.All();
             //var data = repo.Get超級複雜的資料集();
-            
+
             //return View(data);
             //var data = db.客戶聯絡人.Where(t => t.是否已刪除 == false).Where(t => t.姓名.Contains(ContactPersonName)).ToList();
-
-            var data=repo.KeywordFind(ContactPersonName);
+            object data = null;
+            if (JobTitleType != "全部" && JobTitleType != "")
+            {
+                data = repo.KeywordFind(JobTitleType);
+            }
+            else 
+            {
+                data = repo.All().ToList();
+            }
+           
+            List<string> SearchJobTitle = GetJobTitleItem();
+            ViewBag.JobTitleItem = SearchJobTitle;
             return View(data);
         }
-
+        //自客戶聯絡人資料表以Distinct方式取得職稱項目
+        private List<string> GetJobTitleItem()
+        {
+            List<string> SearchJobTitle = new List<string>();
+            SearchJobTitle.Add("全部");
+            var GetJB = db.客戶聯絡人.Select(m => m.職稱).Distinct().ToList();
+            foreach (var item in GetJB)
+            {
+                SearchJobTitle.Add(item);
+            }
+            return SearchJobTitle;
+        }
+        
         // GET: ClientContactPerson/Details/5
         public ActionResult Details(int? id)
         {

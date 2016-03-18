@@ -30,7 +30,8 @@ namespace MVCHomeWork1.Models
 
         public IList<客戶聯絡人> KeywordFind(string keyword)
         {
-            return this.All().Where(p => p.姓名.Contains(keyword)).ToList();
+            //return this.All().Where(p => p.姓名.Contains(keyword)).ToList();
+            return this.All().Where(p => p.職稱==keyword).ToList();
         }
 
         ////也可以用IQueryable1、IEnumerable
