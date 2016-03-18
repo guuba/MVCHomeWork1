@@ -8,23 +8,35 @@ using System.Web;
 using System.Web.Mvc;
 using MVCHomeWork1.Models;
 
+
 namespace MVCHomeWork1.Controllers
 {
     public class ClientContactPersonController : Controller
     {
-        private 客戶資料Entities db = new 客戶資料Entities();
+        //private 客戶資料Entities db = new 客戶資料Entities();
+        客戶聯絡人Repository repo = RepositoryHelper.Get客戶聯絡人Repository();
+        客戶資料Entities db = new 客戶資料Entities();
 
         // GET: ClientContactPerson
         public ActionResult Index()
         {
-            var 客戶聯絡人 = db.客戶聯絡人.Where(e =>e.是否已刪除==false).Include(客 => 客.客戶資料);
-            return View(客戶聯絡人.ToList());
+            var data = repo.All();
+            return View(data);
+            //var 客戶聯絡人=repo.Find()
+            //var 客戶聯絡人 = db.客戶聯絡人.Where(e =>e.是否已刪除==false).Include(客 => 客.客戶資料);
+            //return View(客戶聯絡人.ToList());
         }
 
         [HttpPost]
         public ActionResult Index(string ContactPersonName)
         {
-            var data = db.客戶聯絡人.Where(t => t.是否已刪除 == false).Where(t => t.姓名.Contains(ContactPersonName)).ToList();
+            //var data = repo.All();
+            //var data = repo.Get超級複雜的資料集();
+            
+            //return View(data);
+            //var data = db.客戶聯絡人.Where(t => t.是否已刪除 == false).Where(t => t.姓名.Contains(ContactPersonName)).ToList();
+
+            var data=repo.KeywordFind(ContactPersonName);
             return View(data);
         }
 
@@ -35,7 +47,8 @@ namespace MVCHomeWork1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = repo.Find(id);
+            //客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
@@ -46,12 +59,16 @@ namespace MVCHomeWork1.Controllers
         // GET: ClientContactPerson/Create
         public ActionResult Create()
         {
-            ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱");
+           
+           ViewBag.客戶Id = new SelectList(db.客戶資料, "Id", "客戶名稱");
             return View();
         }
 
         // POST: ClientContactPerson/Create
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
+
+
+
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -60,12 +77,15 @@ namespace MVCHomeWork1.Controllers
             客戶聯絡人 EmailSerachResult = new 客戶聯絡人();
             if (ModelState.IsValid)
             {
-                EmailSerachResult = db.客戶聯絡人.Where(e =>e.客戶Id == 客戶聯絡人.客戶Id).Where(e => e.Email == 客戶聯絡人.Email).FirstOrDefault();
+                //EmailSerachResult = db.客戶聯絡人.Where(e =>e.客戶Id == 客戶聯絡人.客戶Id).Where(e => e.Email == 客戶聯絡人.Email).FirstOrDefault();
+                EmailSerachResult = repo.All().Where(e => e.客戶Id == 客戶聯絡人.客戶Id).Where(e => e.Email == 客戶聯絡人.Email).FirstOrDefault();
                 if (EmailSerachResult == null) 
                 {
-                db.客戶聯絡人.Add(客戶聯絡人);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    //db.客戶聯絡人.Add(客戶聯絡人);
+                    //db.SaveChanges();
+                    repo.Add(客戶聯絡人);
+                    repo.UnitOfWork.Commit();
+                    return RedirectToAction("Index");
                 }
             }
 
@@ -115,7 +135,9 @@ namespace MVCHomeWork1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            //客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = repo.Find(id);
+
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
@@ -128,10 +150,12 @@ namespace MVCHomeWork1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            //var 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            var 客戶聯絡人 = repo.Find(id);
             //db.客戶聯絡人.Remove(客戶聯絡人);
             客戶聯絡人.是否已刪除 = true;
-            db.SaveChanges();
+            repo.UnitOfWork.Commit();
+            //db.SaveChanges();
             return RedirectToAction("Index");
         }
 
